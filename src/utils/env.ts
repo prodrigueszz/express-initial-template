@@ -5,12 +5,9 @@ import { config } from 'dotenv'
 config({ path: ".env.example" });
 
 const envSchema = z.object({
-  DATABASE_URL: z.string()
+  DATABASE_URL: z.url()
     .startsWith('postgresql://'),
-  PORT: z.number()
-}) 
+  PORT: z.string()
+}); 
 
-export const env = envSchema.parse({
-  databaseUrl: process.env.DATABASE_URL,
-  port: process.env.PORT
-})
+export const env = envSchema.parse(process.env);
