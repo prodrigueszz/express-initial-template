@@ -1,30 +1,33 @@
-export class Result<T> {
-  private readonly value?: T;
-  private readonly error?: Error;
-  private readonly success: boolean;
+import type { ApiError } from "./api-error.js";
 
-  private constructor(success: boolean, value?: T, error?: Error) {
-    this.success = success;
-    this.error = error
-    this.value = value;    
+export class Result<T> {
+  private readonly _value?: T;
+  private readonly _error?: ApiError;
+  private readonly _success: boolean;
+
+  private constructor(success: boolean, value?: T, error?: ApiError) {
+    this._success = success;
+    this._error = error
+    this._value = value;    
   }
 
   static ok<T>(value: T): Result<T> {
     return new Result<T>(true, value);
   }
 
-  static error<T>(error: Error): Result<T> {
+  static error<T>(error: ApiError): Result<T> {
     return new Result<T>(false, undefined, error);
   }
 
-  isSuccess(): boolean {
-    return this.success;
+  get success(): boolean {
+    return this._success;
   }
 
-  get(): T | Error {
-    if (!this.success) {
-      return this.error!
-    }
-    return this.value!
+  get error(): ApiError {
+    return this._error!;
+  }
+
+  get value(): T {
+    return this._value!;
   }
  }
